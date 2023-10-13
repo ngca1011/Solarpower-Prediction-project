@@ -6,7 +6,7 @@ This project uses JavaScript as the programming language to establish integratio
 
 ## Technologies
 
-In this project, we have chosen Mosquitto MQTT as our message broker due to its lightweight nature and suitability for our Node.js runtime environment. Additionally, we utilize the open-source MQTT.js library from GitHub to efficiently implement the project. The following technologies are used:
+In this project, we have chosen Mosquitto MQTT as our message broker due to its lightweight nature and suitability for our Node.js runtime environment. Additionally, we use the open-source MQTT.js library from GitHub to efficiently implement the project. The following technologies are used in our project:
 
 - Node.js v20.7.0
 - Mosquitto v2.0.18
