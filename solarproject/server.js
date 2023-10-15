@@ -13,7 +13,9 @@ const geocoder = NodeGeocoder(options);
 
 server.on('connect', () => {
   console.log('Server ist mit Broker verbunden');
-  server.subscribe('REQUEST'); // Server aboniert das Topic solar/request von Client
+
+  //Server aboniert das Topic solar/request von Client
+  server.subscribe('REQUEST'); 
 });
 
 server.on('message', async (topic, message) => {
@@ -26,13 +28,13 @@ server.on('message', async (topic, message) => {
     //Konvertieren von Adresse zur Koordination
     const location = await geocoder.geocode(requestAdresse);
 
-    // Rufen die Solarvorhersage von einer RESTful-API auf 
+    //Rufen die Solarvorhersage von einer RESTful-API auf 
     try {
       const response = await axios.get(`https://api.forecast.solar/estimate/${location[0].latitude}/${location[0].longitude}/0/0/${request.solarLeistung}`);
 
       const vorhersage = response.data;
 
-      // Server sendet die Vorhersage zurück an den Client
+      //Server sendet die Vorhersage zurück an den Client
       server.publish('RESPONSE', JSON.stringify(vorhersage));
     } catch (error) {
       console.error('Vorhersageabfrage fällt aus', error);

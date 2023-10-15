@@ -13,12 +13,13 @@ client.on('connect', () => {
       postleitzahl: '76137',
       solarLeistung : 10000,
     };
+
     //Client veröffentlicht das Topic REQUEST
     client.publish('REQUEST', JSON.stringify(request));
+
+    //Client abonniert das Topic RESPONSE von Server
+    client.subscribe('RESPONSE'); 
 });
-  
-// Client abonniert das Topic RESPONSE von Server
-client.subscribe('RESPONSE'); 
   
 client.on('message', (topic, message) => {
     if (topic === 'RESPONSE') {
