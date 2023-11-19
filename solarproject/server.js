@@ -1,13 +1,10 @@
+import options from './config';
+const fs = require('fs');
 const mqtt = require('mqtt');
 const axios = require('axios');
 const NodeGeocoder = require('node-geocoder');
 
 const server = mqtt.connect('mqtt://192.168.0.192:1883');
-
-const options = {
-  provider: 'google',
-  apiKey: "AIzaSyAS89DviyFBIa5dMYBfsd3Dn6mvXClxefU", 
-};
 
 const geocoder = NodeGeocoder(options);
 
@@ -36,6 +33,14 @@ server.on('message', async (topic, message) => {
 
       //Server sendet die Vorhersage zurück an den Client
       server.publish('RESPONSE', JSON.stringify(vorhersage));
+
+      //Protokollieren die Vorhersage für heute
+      const today = new Date();
+
+      fs.appendFile('protokollierung.txt', today + '\n' + JSON.stringify(vorhersage) + '\n', function (error) {
+        if (error) throw error;
+        console.log('Updated for ' + today);
+      });
     } catch (error) {
       console.error('Vorhersageabfrage fällt aus', error);
     }

@@ -1,6 +1,5 @@
 const mqtt = require('mqtt');
 const axios = require('axios');
-const fs = require('fs');
 
 const client = mqtt.connect('mqtt://192.168.0.192:1883'); 
 
@@ -25,13 +24,5 @@ client.on('message', (topic, message) => {
     if (topic === 'RESPONSE') {
       const vorhersage = JSON.parse(message.toString());
       console.log('Vorhersage der Solarproduktion:' + '\n', vorhersage);
-
-      //Protokollieren die Vorhersage für heute
-      const today = new Date();
-
-      fs.appendFile('protokollierung.txt', today + '\n' + JSON.stringify(vorhersage) + '\n', function (error) {
-        if (error) throw error;
-        console.log('Updated for ' + today);
-      });
     }
 });
