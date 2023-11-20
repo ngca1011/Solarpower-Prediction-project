@@ -20,26 +20,26 @@ server.on('message', async (topic, message) => {
     const request = JSON.parse(message.toString());
     console.log('Anfrage wird erhalten');
 
-    requestAdresse = {address: request.straße, country: request.land, zipcode: request.postleitzahl};
+    requestAdresse = {address: request.street, country: request.country, zipcode: request.zipcode};
 
     //Konvertieren von Adresse zur Koordination
     const location = await geocoder.geocode(requestAdresse);
 
     //Rufen die Solarvorhersage von einer RESTful-API auf 
     try {
-      const response = await axios.get(`https://api.forecast.solar/estimate/${location[0].latitude}/${location[0].longitude}/0/0/${request.solarLeistung}`);
+      const response = await axios.get(`https://api.forecast.solar/estimate/${location[0].latitude}/${location[0].longitude}/0/0/${request.solarPower}`);
 
-      const vorhersage = response.data;
+      const prediction = response.data;
 
       //Server sendet die Vorhersage zurück an den Client
-      server.publish('RESPONSE', JSON.stringify(vorhersage));
+      server.publish('RESPONSE', JSON.stringify(prediction));
 
       //Protokollieren die Vorhersage für heute
       const today = new Date();
 
-      fs.appendFile('protokollierung.txt', today + '\n' + JSON.stringify(vorhersage) + '\n', function (error) {
+      fs.appendFile('log.txt', today + '\n' + JSON.stringify(prediction) + '\n', function (error) {
         if (error) throw error;
-        console.log('Updated for ' + today);
+        console.log('Aktualisiert für' + today);
       });
     } catch (error) {
       console.error('Vorhersageabfrage fällt aus', error);
